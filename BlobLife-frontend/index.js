@@ -1,9 +1,15 @@
 function startBlob(){
 const body = document.querySelector('body')
+let formDiv = document.getElementById('formDiv')
+formDiv.remove()
+const gameWindow = document.createElement('div')
+gameWindow.setAttribute('class', 'game-window')
+// body.innerHTML = ''
 const canvas = document.createElement('canvas');
 canvas.height = 800;
 canvas.width = 800;
-body.appendChild(canvas)
+gameWindow.appendChild(canvas)
+body.appendChild(gameWindow)
 const gravity = 1;
 const jumpHeight = -15;
 let jumped = false;
