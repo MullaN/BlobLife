@@ -15,21 +15,24 @@ const jumpHeight = -15;
 let jumped = false;
 let grabbed = false;
 const playerMove = 5;
-let playerColor = '#5500bb';
+let playerColor = '#1aa6b7';
 let spin = 20;
 let spincrementer = -1;
+const spincolor = ['','darkgreen','green']
+let gameOver = false;
 
 console.log(typeof canvas.height)
 const twod = canvas.getContext('2d');
 
-function Platform(x, y, length){
+function Platform(x, y, length, height){
     this.x = x;
     this.y = y;
     this.length = length;
+    this.height = height;
 
     this.draw = function(){
-        twod.fillStyle = 'black';
-        twod.fillRect(this.x, this.y, this.length, 5);
+        twod.fillStyle = '#637373';
+        twod.fillRect(this.x, this.y, this.length, this.height);
     }
 }
 
@@ -56,23 +59,19 @@ function BlobMan(x, y){
     }
     this.update = function() {
         console.log(`y:${this.y}, x:${this.x}, dy:${this.dy}, dx:${this.dx}, onGround:${this.onGround}, wallGrab: ${this.wallGrab}, grabbed: ${grabbed}`)
-        let possibleLandings = Platforms.slice().sort((a, b) => a.y - b.y);
+        let possibleLandings = platforms.slice().sort((a, b) => a.y - b.y);
         possibleLandings = possibleLandings.filter(plat => plat.y >= this.y + this.size + this.dy);
         possibleLandings = possibleLandings.filter(plat => plat.x <= this.x + this.size && plat.x + plat.length >= this.x)
-        let platformOn = Platforms.filter(plat => plat.y === this.y + this.size)
+        let platformOn = platforms.filter(plat => plat.y === this.y + this.size)
         let possibleBonks = [];
-        this.x += this.dx;
+        let possibleWalls = [];
         if (this.dy < 0){
-            possibleBonks = Platforms.slice().sort((a, b) => a.y - b.y);
-            possibleBonks = possibleBonks.filter(plat => plat.y + 5 < this.y + this.dy);
+            possibleBonks = platforms.slice().sort((a, b) => b.y - a.y);
+            possibleBonks = possibleBonks.filter(plat => plat.y + plat.height > this.y + this.dy && this.y > plat.y + plat.height);
             possibleBonks = possibleBonks.filter(plat => plat.x <= this.x + this.size && plat.x + plat.length >= this.x)
-            console.log(possibleBonks);
         }
-        if (this.wallGrab < 0 && (this.x === canvas.width - this.size || this.x === 0)){
-            this.dy += 0.1;
-            this.wallGrab++;
-        } else if (this.dy < 0 && possibleBonks.length > 0 && this.y + this.dy + this.dy <= possibleBonks[0].y) {
-            this.y = possibleBonks[0].y + 5;
+        if (this.dy < 0 && possibleBonks.length > 0 && this.y + this.dy + this.dy <= possibleBonks[0].y + possibleBonks[0].height) {
+            this.y = possibleBonks[0].y + possibleBonks[0].height;
             this.dy = 0;
         } else if (this.y + this.size + this.dy < possibleLandings[0].y){
             this.dy += gravity;
@@ -80,10 +79,45 @@ function BlobMan(x, y){
             this.onGround = false;
         }
         this.y += this.dy;
+        if (this.dx > 0){
+            possibleWalls = platforms.slice().sort((a, b) => a.x - b.x);
+            possibleWalls = possibleWalls.filter(plat => plat.y + plat.height > this.y && this.y + this.size > plat.y);
+            possibleWalls = possibleWalls.filter(plat => plat.x <= this.x + this.size + this.dx && this.x < plat.x + plat.length );
+            if (possibleWalls.length > 0){
+                this.dx = 0;
+                this.x = possibleWalls[0].x - this.size;
+                if(!this.onGround && this.wallGrab === 0 && !grabbed){
+                    this.wallGrab = -30;
+                    grabbed = true;
+                    this.dy = 0;
+                }
+            }
+        } else if (this.dx < 0){
+            possibleWalls = platforms.slice().sort((a, b) => b.x - a.x);
+            possibleWalls = possibleWalls.filter(plat => plat.y + plat.height > this.y && this.y + this.size > plat.y);
+            possibleWalls = possibleWalls.filter(plat => plat.x + plat.length >= this.x + this.dx && this.x > plat.x );
+            if (possibleWalls.length > 0){
+                this.dx = 0;
+                this.x = possibleWalls[0].x + possibleWalls[0].length;
+                if(!this.onGround && this.wallGrab === 0 && !grabbed){
+                    this.wallGrab = -30;
+                    grabbed = true;
+                    this.dy = 0;
+                }
+            }
+        }
+        this.x += this.dx;
+        if (this.wallGrab < 0 && (this.x === canvas.width - this.size || this.x === 0 || (possibleWalls.length > 0 && possibleWalls[0].x - this.size === this.x))){
+            this.dy -= 0.9;
+            this.wallGrab++;
+        }
         if (this.y + this.size + this.dy + this.dy + gravity > possibleLandings[0].y) {
             platformOn[0] = possibleLandings[0];
         }
         if (platformOn.length > 0){
+            if (this.dy >= 30){
+                gameOver = true;
+            }
             this.onGround = true;
             this.y = platformOn[0].y - this.size;
             this.dy = 0;
@@ -110,11 +144,17 @@ function BlobMan(x, y){
     }
 }
 
-const Platforms = [];
-Platforms.push(new Platform(0, 800, 800));
-Platforms.push(new Platform(0, 700, 750));
+const platforms = [];
+platforms.push(new Platform(0, 800, 800, 10));
+platforms.push(new Platform(150, 150, 150, 650));
+platforms.push(new Platform(75, 710, 75, 10));
+platforms.push(new Platform(0, 600, 75, 10));
+platforms.push(new Platform(75, 500, 75, 10));
+platforms.push(new Platform(75, 390, 75, 10));
+platforms.push(new Platform(0, 280, 75, 10));
 
-const Player = new BlobMan(0, canvas.height - 20);
+
+let Player;
 
 window.addEventListener('keydown', (e) => {
     const key = e.key;
@@ -145,17 +185,29 @@ window.addEventListener('keyup', (e) => {
 })
 
 function init(){
-
+    playerColor = '#1aa6b7';
+    Player = new BlobMan(0, canvas.height - 20);
+    gameOver = false;
+    animate();
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    if (!gameOver){
+        requestAnimationFrame(animate);
+    } else {
+        playerColor = 'red';
+        Player.draw();
+        setTimeout(init, 2000);
+    }
     twod.clearRect(0,0,canvas.width,canvas.height);
-    Platforms.forEach(plat => plat.draw());
+    platforms.forEach(plat => plat.draw());
     Player.update();
-    twod.fillRect(10, 10, spin, 20)
+    spin += spincrementer;
+    if (spin === 0 || spin === 20){
+        spincrementer = -spincrementer;
+    }
+    twod.fillStyle = spincolor.slice(spincrementer)[0];
+    twod.fillRect((20 - spin * .5 ), 10, spin, 20);
 }
 
 init();
-animate();
-}
