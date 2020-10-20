@@ -13,9 +13,10 @@ function userForm() {
     </form>
     `
     body.appendChild(formDiv)
+
+    getUsers()
     document.getElementById('user-login').addEventListener('submit', (e) => {
         e.preventDefault()
-        getUsers()
         let player = document.getElementById('username').value
         let exists = !!(Users.find(user => user.name === player))
         if (exists) {
@@ -23,7 +24,8 @@ function userForm() {
             h3.textContent = `User: ${player}`
             body.appendChild(h3)
             startBlob()
-        } else {
+        } 
+        else {
             fetch(userUrl, {
                 method: 'POST',
                 headers: {
@@ -41,7 +43,7 @@ function userForm() {
                 startBlob()
             })
         }
-        // startBlob()
+       
     })
 }
 

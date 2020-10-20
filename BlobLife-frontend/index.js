@@ -1,7 +1,8 @@
 function startBlob(){
+    startTime()
     const body = document.querySelector('body')
     let formDiv = document.getElementById('formDiv')
-    formDiv.remove()
+    if (!!(formDiv)) {formDiv.remove()}
     const gameWindow = document.createElement('div')
     gameWindow.setAttribute('class', 'game-window')
     // body.innerHTML = ''
