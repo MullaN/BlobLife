@@ -1,6 +1,9 @@
-const canvas = document.querySelector('canvas');
+function startBlob(){
+const body = document.querySelector('body')
+const canvas = document.createElement('canvas');
 canvas.height = 800;
 canvas.width = 800;
+body.appendChild(canvas)
 const gravity = 1;
 const jumpHeight = -15;
 let jumped = false;
@@ -149,3 +152,4 @@ function animate() {
 
 init();
 animate();
+}
