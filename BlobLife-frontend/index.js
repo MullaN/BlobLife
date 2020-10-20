@@ -17,9 +17,6 @@ function startBlob(){
     let grabbed = false;
     const playerMove = 5;
     let playerColor = '#1aa6b7';
-    let spin = 20;
-    let spincrementer = -1;
-    const spincolor = ['','darkgreen','green']
     let gameOver = false;
 
     console.log(typeof canvas.height)
@@ -34,6 +31,28 @@ function startBlob(){
         this.draw = function(){
             twod.fillStyle = '#637373';
             twod.fillRect(this.x, this.y, this.length, this.height);
+        }
+    }
+    
+    function Goal(x, y, size){
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.spin = this.size;
+        this.spincrementer = -1;
+        this.spincolor = ['','green','green']
+
+        this.draw = function(){
+            twod.fillStyle = this.spincolor.slice(this.spincrementer)[0];
+            twod.fillRect((this.x + this.size/2 - this.spin * .5 ), this.y, this.spin, this.size);
+        }
+
+        this.update = function(){
+            this.spin += this.spincrementer;
+            if (this.spin === 0 || this.spin === this.size){
+                this.spincrementer = -this.spincrementer;
+            }
+            this.draw();
         }
     }
 
@@ -59,7 +78,7 @@ function startBlob(){
             twod.stroke();
         }
         this.update = function() {
-            console.log(`y:${this.y}, x:${this.x}, dy:${this.dy}, dx:${this.dx}, onGround:${this.onGround}, wallGrab: ${this.wallGrab}, grabbed: ${grabbed}`)
+            // console.log(`y:${this.y}, x:${this.x}, dy:${this.dy}, dx:${this.dx}, onGround:${this.onGround}, wallGrab: ${this.wallGrab}, grabbed: ${grabbed}`)
             let possibleLandings = platforms.slice().sort((a, b) => a.y - b.y);
             possibleLandings = possibleLandings.filter(plat => plat.y >= this.y + this.size + this.dy);
             possibleLandings = possibleLandings.filter(plat => plat.x <= this.x + this.size && plat.x + plat.length >= this.x)
@@ -153,9 +172,12 @@ function startBlob(){
     platforms.push(new Platform(75, 500, 75, 10));
     platforms.push(new Platform(75, 390, 75, 10));
     platforms.push(new Platform(0, 280, 75, 10));
+    platforms.push(new Platform(75, 170, 75, 10));
+    platforms.push(new Platform(450, 0, 200, 650));
 
 
     let Player;
+    let LevelGoal = new Goal(10, 750, 20)
 
     window.addEventListener('keydown', (e) => {
         const key = e.key;
@@ -203,12 +225,17 @@ function startBlob(){
         twod.clearRect(0,0,canvas.width,canvas.height);
         platforms.forEach(plat => plat.draw());
         Player.update();
-        spin += spincrementer;
-        if (spin === 0 || spin === 20){
-            spincrementer = -spincrementer;
+        LevelGoal.update();
+        if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
+            gameOver = true;
+            //this is checking for 
         }
-        twod.fillStyle = spincolor.slice(spincrementer)[0];
-        twod.fillRect((20 - spin * .5 ), 10, spin, 20);
     }
     init();
+
+    function overlap(x1, y1, s1, x2, y2, s2) {
+        const width = Math.min(x1 + s1, x2 + s2) - Math.max(x1, x2);
+        const height = -(Math.max(-y1 - s1, -y2 - s1) - Math.min(-y1, -y2));
+        return width > 0 && height > 0 ? width * height : 0;
+    }
 }
