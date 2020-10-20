@@ -6,9 +6,10 @@ const jumpHeight = -15;
 let jumped = false;
 let grabbed = false;
 const playerMove = 5;
-let playerColor = '#5500bb';
+let playerColor = '#1aa6b7';
 let spin = 20;
 let spincrementer = -1;
+const spincolor = ['','#f56a79','#ff414d']
 
 console.log(typeof canvas.height)
 const twod = canvas.getContext('2d');
@@ -19,7 +20,7 @@ function Platform(x, y, length){
     this.length = length;
 
     this.draw = function(){
-        twod.fillStyle = 'black';
+        twod.fillStyle = '#637373';
         twod.fillRect(this.x, this.y, this.length, 5);
     }
 }
@@ -144,7 +145,12 @@ function animate() {
     twod.clearRect(0,0,canvas.width,canvas.height);
     Platforms.forEach(plat => plat.draw());
     Player.update();
-    twod.fillRect(10, 10, spin, 20)
+    spin += spincrementer;
+    if (spin === 0 || spin === 20){
+        spincrementer = -spincrementer;
+    }
+    twod.fillStyle = spincolor.slice(spincrementer)[0];
+    twod.fillRect((20 - spin * .5 ), 10, spin, 20);
 }
 
 init();
