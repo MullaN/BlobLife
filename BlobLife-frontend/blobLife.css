@@ -1,12 +1,35 @@
 /* The sidebar menu */
+
+.gamewindow {
+  /* position: absolute; */
+  /* float: left; */
+  left: 0;
+}
+
+
 .sidebar {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 250px; /* Set the width of the sidebar */
-    position: absolute;
-    right: -20px;
-    border: 3px solid blue;
-  
-    background-color: white; /* Black */
-    overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 20px;
-  }
+  height: 100%;  /* Full-height: remove this if you want "auto" height */
+  width: 250px; /* Set the width of the sidebar */
+  /* float: left; */
+  /* right: -200px; */
+  border: 3px solid blue;
+  /* display: inline-block; */
+  background-color: white; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+  background-color: #45244f;
+  color: #fcfcc2;
+  font-family: Tahoma, Geneva, sans-serif
+}
+
+h1 {
+  background-color: #45244f;
+  color: #fcfcc2;
+  font-family: Tahoma, Geneva, sans-serif
+}
+
+body {
+  background-color: #331a3b;
+}
+
+div.sidebar, div.gamewindow { float: left; }

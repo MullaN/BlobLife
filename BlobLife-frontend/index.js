@@ -5,6 +5,7 @@ function startBlob(){
     let formDiv = document.getElementById('formDiv')
     if (!!(formDiv)) {formDiv.remove()}
     let sidebar = document.querySelector('.sidebar')
+   
     const gameWindow = document.createElement('div')
     gameWindow.setAttribute('class', 'game-window')
     // body.innerHTML = ''
@@ -14,6 +15,7 @@ function startBlob(){
     canvas.width = screenSize;
     gameWindow.appendChild(canvas)
     body.appendChild(gameWindow)
+    
     let gravity = screenSize * 1/800;
     let jumpHeight = -(screenSize * 15/800);
     let jumped = false;
