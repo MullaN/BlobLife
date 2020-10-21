@@ -103,6 +103,12 @@ function addLeaderBoard(leaderboards, scores){
     }
 }
 
+let paused = false
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        paused = !paused
+    }
+})
 
 function startTime() {
     let timeCount = 0
@@ -110,12 +116,14 @@ function startTime() {
     sidebar.append(counterDiv)
     body.append(sidebar)
     setInterval(function(){
+        if(!paused) {
         timeCount += 1
         counterDiv.innerHTML = ''
         counter.setAttribute('class', 'counter')
         counter.textContent = `Time: ${timeCount}`
         counter.id = timeCount
         counterDiv.appendChild(counter)
+        }
     }, 1000)
 }
 

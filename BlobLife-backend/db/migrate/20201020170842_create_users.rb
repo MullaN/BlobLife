@@ -7,3 +7,6 @@ class CreateUsers < ActiveRecord::Migration[6.0]
     end
   end
 end
+
+# t.integer :levels_complete
+# t.integer :time_sum
