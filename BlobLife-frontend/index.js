@@ -250,6 +250,9 @@ function startBlob(){
         LevelGoal.update();
         if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
             gameOver = true;
+            let timer = document.querySelector('.counter')
+            let userid = document.querySelector('h3').id
+            createScore(timer.id, userid)
             //this is checking for 
         }
     }
