@@ -166,18 +166,35 @@ function startBlob(){
 
     const platforms = [];
     platforms.push(new Platform(0, 800, 800, 10));
-    platforms.push(new Platform(150, 150, 150, 650));
-    platforms.push(new Platform(75, 710, 75, 10));
-    platforms.push(new Platform(0, 600, 75, 10));
-    platforms.push(new Platform(75, 500, 75, 10));
-    platforms.push(new Platform(75, 390, 75, 10));
-    platforms.push(new Platform(0, 280, 75, 10));
-    platforms.push(new Platform(75, 170, 75, 10));
-    platforms.push(new Platform(450, 0, 200, 650));
+    platforms.push(new Platform(0, 700, 700, 20));
+    platforms.push(new Platform(0, 600, 50, 100));
+    platforms.push(new Platform(50, 650, 50, 50));
+    platforms.push(new Platform(100, 550, 700, 20));
+    platforms.push(new Platform(300, 500, 20, 50));
+    platforms.push(new Platform(500, 500, 20, 50));
+    platforms.push(new Platform(700, 500, 100, 50));
+    platforms.push(new Platform(0, 400, 300, 20));
+    platforms.push(new Platform(350, 400, 200, 20));
+    platforms.push(new Platform(600, 400, 100, 20));
+    platforms.push(new Platform(100, 300, 700, 20));
+    platforms.push(new Platform(300, 250, 20, 50));
+    platforms.push(new Platform(300, 160, 20, 10));
+    platforms.push(new Platform(500, 260, 20, 40));
+    platforms.push(new Platform(500, 170, 20, 40));
+    platforms.push(new Platform(0, 150, 700, 20));
+
+    // platforms.push(new Platform(150, 150, 150, 650));
+    // platforms.push(new Platform(75, 710, 75, 10));
+    // platforms.push(new Platform(0, 600, 75, 10));
+    // platforms.push(new Platform(75, 500, 75, 10));
+    // platforms.push(new Platform(75, 390, 75, 10));
+    // platforms.push(new Platform(0, 280, 75, 10));
+    // platforms.push(new Platform(75, 170, 75, 10));
+    // platforms.push(new Platform(450, 0, 200, 650));
 
 
     let Player;
-    let LevelGoal = new Goal(10, 750, 20)
+    let LevelGoal;
 
     window.addEventListener('keydown', (e) => {
         const key = e.key;
@@ -210,6 +227,7 @@ function startBlob(){
     function init(){
         playerColor = '#1aa6b7';
         Player = new BlobMan(0, canvas.height - 20);
+        LevelGoal = new Goal(175, 75, 20);
         gameOver = false;
         animate();
     }
@@ -217,6 +235,10 @@ function startBlob(){
     function animate() {
         if (!gameOver){
             requestAnimationFrame(animate);
+        } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
+            playerColor = 'green';
+            Player.draw();
+            setTimeout(init, 2000);
         } else {
             playerColor = 'red';
             Player.draw();
