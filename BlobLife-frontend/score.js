@@ -1,13 +1,18 @@
 // let ScoreUrl = 'http://localhost:3000/scores'
+const body = document.querySelector('body')
+let counterDiv= document.createElement('div')
+let counter = document.createElement('p')
+counter.textContent = `Time: 0`
+counterDiv.appendChild(counter)
+
+
 function startTime() {
     let timeCount = 0
-    const body = document.querySelector('body')
-    let counterDiv= document.createElement('div')
+
     body.append(counterDiv)
     setInterval(function(){
         timeCount += 1
         counterDiv.innerHTML = ''
-        let counter = document.createElement('p')
         counter.setAttribute('class', 'counter')
         counter.textContent = `Time: ${timeCount}`
         counter.id = timeCount
@@ -29,6 +34,9 @@ function createScore(time, userid) {
     })
     .then(res => res.json())
     .then( score => {
+        // create posting score logic here? or perhaps send to a function
+        // find or create leaderboard based on todays date
+        // add this score to the board
         console.log(score)
     })
 }
