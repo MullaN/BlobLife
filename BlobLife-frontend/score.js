@@ -6,6 +6,12 @@ let counter = document.createElement('p')
 counter.textContent = `Time: 0`
 counterDiv.appendChild(counter)
 
+
+
+let sidebar = document.createElement('div')
+sidebar.setAttribute('class', 'sidebar')
+body.append(sidebar)
+
 let currentDate = new Date();
 let date = `${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
 
@@ -67,7 +73,7 @@ function addLeaderBoard(leaderboards, scores){
 
 
         boardDiv.append(ul)
-        body.append(boardDiv)
+        sidebar.append(boardDiv)
 
         postScores(todaysScores, todaysBoard)
 
@@ -92,7 +98,7 @@ function addLeaderBoard(leaderboards, scores){
             ul.id = `${todaysBoard.id}l` // l for leaderboard
 
             boardDiv.append(ul)
-            body.append(boardDiv)
+            sidebar.append(boardDiv)
         })
     }
 }
@@ -101,7 +107,7 @@ function addLeaderBoard(leaderboards, scores){
 function startTime() {
     let timeCount = 0
 
-    body.append(counterDiv)
+    sidebar.append(counterDiv)
     setInterval(function(){
         timeCount += 1
         counterDiv.innerHTML = ''

@@ -2,7 +2,6 @@ let Users = []
 let userUrl = 'http://localhost:3000/users'
 
 
-
 function userForm() {
     const body = document.querySelector('body')
     let formDiv = document.createElement('div')
@@ -25,7 +24,7 @@ function userForm() {
             let h3 = document.createElement('h3')
             h3.textContent = `User: ${player}`
             h3.id = Users.find(user => user.name === player).id
-            body.appendChild(h3)
+            sidebar.appendChild(h3)
             startBlob()
         } 
         else {
@@ -43,7 +42,7 @@ function userForm() {
                 let h3 = document.createElement('h3')
                 h3.textContent = `User: ${user.name}`
                 h3.id= user.id
-                body.appendChild(h3)
+                sidebar.appendChild(h3)
                 startBlob()
             })
         }
