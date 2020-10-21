@@ -7,17 +7,37 @@ function startBlob(){
     gameWindow.setAttribute('class', 'game-window')
     // body.innerHTML = ''
     const canvas = document.createElement('canvas');
-    canvas.height = 800;
-    canvas.width = 800;
+    let screenSize = Math.floor(window.innerHeight * .9);
+    canvas.height = screenSize;
+    canvas.width = screenSize;
     gameWindow.appendChild(canvas)
     body.appendChild(gameWindow)
-    const gravity = 1;
-    const jumpHeight = -15;
+    let gravity = screenSize * 1/800;
+    let jumpHeight = -(screenSize * 15/800);
     let jumped = false;
     let grabbed = false;
-    const playerMove = 5;
+    let playerMove = screenSize * 5/800;
     let playerColor = '#1aa6b7';
     let gameOver = false;
+    let currentLevel = 0;
+    const gameLevels = [[],[],[],[]];
+    gameLevels[0].push(new Platform(0, screenSize, screenSize, screenSize * 1/80));
+    gameLevels[0].push(new Platform(0, screenSize * 7/8, screenSize * 7/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(0, screenSize * 6/8, screenSize * 5/80, screenSize * 1/8));
+    gameLevels[0].push(new Platform(screenSize * 5/80, screenSize * 65/80, screenSize * 5/80, screenSize * 5/80));
+    gameLevels[0].push(new Platform(screenSize * 1/8, screenSize * 55/80, screenSize * 7/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(screenSize * 3/8, screenSize * 5/8, screenSize * 2/80, screenSize * 5/80));
+    gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 5/8, screenSize * 2/80, screenSize * 5/80));
+    gameLevels[0].push(new Platform(screenSize * 7/8, screenSize * 5/8, screenSize * 1/8, screenSize * 5/80));
+    gameLevels[0].push(new Platform(0, screenSize * 4/8, screenSize * 3/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(screenSize * 35/80, screenSize * 4/8, screenSize * 2/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(screenSize * 6/8, screenSize * 4/8, screenSize * 1/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(screenSize * 1/8, screenSize * 3/8, screenSize * 7/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(screenSize * 3/8, screenSize * 23/80, screenSize * 2/80, screenSize * 7/80));
+    gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 26/80, screenSize * 2/80, screenSize * 4/80));
+    gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 17/80, screenSize * 2/80, screenSize * 4/80));
+    gameLevels[0].push(new Platform(0, screenSize * 15/80, screenSize * 7/8, screenSize * 2/80));
+
 
     console.log(typeof canvas.height)
     const twod = canvas.getContext('2d');
@@ -29,7 +49,7 @@ function startBlob(){
         this.height = height;
 
         this.draw = function(){
-            twod.fillStyle = '#637373';
+            twod.fillStyle = 'rgba(0,0,0,0)';
             twod.fillRect(this.x, this.y, this.length, this.height);
         }
     }
@@ -49,7 +69,7 @@ function startBlob(){
 
         this.update = function(){
             this.spin += this.spincrementer;
-            if (this.spin === 0 || this.spin === this.size){
+            if (this.spin < 0 || this.spin > this.size){
                 this.spincrementer = -this.spincrementer;
             }
             this.draw();
@@ -63,18 +83,18 @@ function startBlob(){
         this.dy = 0;
         this.onGround = true;
         this.wallGrab = 0;
-        this.size = 20;
+        this.size = screenSize * 2/80;
 
         this.draw = function() {
             twod.fillStyle = playerColor;
             twod.fillRect(this.x, this.y, this.size, this.size);
             twod.fillStyle = 'white';
-            twod.fillRect(this.x + 5, this.y + 3, 2, 5);
-            twod.fillRect(this.x + 13, this.y + 3, 2, 5);
+            twod.fillRect(this.x + screenSize * 5 /800, this.y + screenSize * 3/800, screenSize * 2/800, screenSize * 5/800);
+            twod.fillRect(this.x + screenSize * 13/800, this.y + screenSize * 3/800, screenSize * 2/800, screenSize * 5/800);
             twod.beginPath();
             twod.strokeStyle = 'white';
-            twod.moveTo(this.x + 3, this.y + 13);
-            twod.lineTo(this.x + 17, this.y + 13);
+            twod.moveTo(this.x + screenSize * 3/800, this.y + screenSize * 13/800);
+            twod.lineTo(this.x + screenSize * 17/800, this.y + screenSize * 13/800);
             twod.stroke();
         }
         this.update = function() {
@@ -128,14 +148,14 @@ function startBlob(){
             }
             this.x += this.dx;
             if (this.wallGrab < 0 && (this.x === canvas.width - this.size || this.x === 0 || (possibleWalls.length > 0 && possibleWalls[0].x - this.size === this.x))){
-                this.dy -= 0.9;
+                this.dy -= 0.9 * gravity;
                 this.wallGrab++;
             }
             if (this.y + this.size + this.dy + this.dy + gravity > possibleLandings[0].y) {
                 platformOn[0] = possibleLandings[0];
             }
             if (platformOn.length > 0){
-                if (this.dy >= 30){
+                if (this.dy >= screenSize * 3/80){
                     gameOver = true;
                 }
                 this.onGround = true;
@@ -164,23 +184,7 @@ function startBlob(){
         }
     }
 
-    const platforms = [];
-    platforms.push(new Platform(0, 800, 800, 10));
-    platforms.push(new Platform(0, 700, 700, 20));
-    platforms.push(new Platform(0, 600, 50, 100));
-    platforms.push(new Platform(50, 650, 50, 50));
-    platforms.push(new Platform(100, 550, 700, 20));
-    platforms.push(new Platform(300, 500, 20, 50));
-    platforms.push(new Platform(500, 500, 20, 50));
-    platforms.push(new Platform(700, 500, 100, 50));
-    platforms.push(new Platform(0, 400, 300, 20));
-    platforms.push(new Platform(350, 400, 200, 20));
-    platforms.push(new Platform(600, 400, 100, 20));
-    platforms.push(new Platform(100, 300, 700, 20));
-    platforms.push(new Platform(300, 230, 20, 70));
-    platforms.push(new Platform(500, 260, 20, 40));
-    platforms.push(new Platform(500, 170, 20, 40));
-    platforms.push(new Platform(0, 150, 700, 20));
+    let platforms = [];
 
     // platforms.push(new Platform(150, 150, 150, 650));
     // platforms.push(new Platform(75, 710, 75, 10));
@@ -224,9 +228,11 @@ function startBlob(){
     })
 
     function init(){
+        platforms = []
+        gameLevels[currentLevel].forEach(plat => platforms.push(plat))
         playerColor = '#1aa6b7';
-        Player = new BlobMan(0, canvas.height - 20);
-        LevelGoal = new Goal(175, 75, 20);
+        Player = new BlobMan(0, screenSize - screenSize * 2/80);
+        LevelGoal = new Goal(screenSize * 175/800, screenSize * 75/800, screenSize* 2/80);
         gameOver = false;
         animate();
     }
@@ -252,7 +258,6 @@ function startBlob(){
         LevelGoal.update();
         if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
             gameOver = true;
-            //this is checking for 
         }
     }
     init();
