@@ -177,8 +177,7 @@ function startBlob(){
     platforms.push(new Platform(350, 400, 200, 20));
     platforms.push(new Platform(600, 400, 100, 20));
     platforms.push(new Platform(100, 300, 700, 20));
-    platforms.push(new Platform(300, 250, 20, 50));
-    platforms.push(new Platform(300, 160, 20, 10));
+    platforms.push(new Platform(300, 230, 20, 70));
     platforms.push(new Platform(500, 260, 20, 40));
     platforms.push(new Platform(500, 170, 20, 40));
     platforms.push(new Platform(0, 150, 700, 20));
@@ -236,6 +235,9 @@ function startBlob(){
         if (!gameOver){
             requestAnimationFrame(animate);
         } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
+            let timer = document.querySelector('.counter')
+            let userid = document.querySelector('h3').id
+            createScore(timer.id, userid)
             playerColor = 'green';
             Player.draw();
             setTimeout(init, 2000);
@@ -250,9 +252,6 @@ function startBlob(){
         LevelGoal.update();
         if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
             gameOver = true;
-            let timer = document.querySelector('.counter')
-            let userid = document.querySelector('h3').id
-            createScore(timer.id, userid)
             //this is checking for 
         }
     }
