@@ -9,7 +9,7 @@ function startBlob(){
     gameWindow.setAttribute('class', 'game-window')
     // body.innerHTML = ''
     const canvas = document.createElement('canvas');
-    let screenSize = Math.floor(window.innerHeight * .6);
+    let screenSize = Math.floor(window.innerHeight * .85);
     canvas.height = screenSize;
     canvas.width = screenSize;
     gameWindow.appendChild(canvas)
@@ -21,7 +21,7 @@ function startBlob(){
     let playerMove = screenSize * 5/800;
     let playerColor = '#1aa6b7';
     let gameOver = false;
-    let currentLevel = 0;
+    let currentLevel = 1;
     const gameLevels = [[],[],[],[]];
     gameLevels[0].push(new Platform(0, screenSize, screenSize, screenSize * 1/80));
     gameLevels[0].push(new Platform(0, screenSize * 7/8, screenSize * 7/8, screenSize * 2/80));
@@ -39,19 +39,29 @@ function startBlob(){
     gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 26/80, screenSize * 2/80, screenSize * 4/80));
     gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 17/80, screenSize * 2/80, screenSize * 4/80));
     gameLevels[0].push(new Platform(0, screenSize * 15/80, screenSize * 7/8, screenSize * 2/80));
-
+    gameLevels[1].push(new Platform(0, screenSize - screenSize * 1/80, screenSize, screenSize * 1/80, true));
+    gameLevels[1].push(new Platform(screenSize * 65/80, screenSize * 7/8, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 1/2, screenSize * 7/8, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 1/4, screenSize * 65/80, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(0, screenSize * 55/80, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 15/80, screenSize * 45/80, screenSize * 15/80, screenSize * 2/80));
 
     console.log(typeof canvas.height)
     const twod = canvas.getContext('2d');
 
-    function Platform(x, y, length, height){
+    function Platform(x, y, length, height, kill=false){
         this.x = x;
         this.y = y;
         this.length = length;
         this.height = height;
+        this.kill = kill;
 
         this.draw = function(){
-            twod.fillStyle = 'rgba(0,0,0,0)';
+            if (this.kill){
+                twod.fillStyle = 'rgba(255,0,0,1)';
+            } else {
+                twod.fillStyle = 'rgba(0,0,0,1)';
+            }
             twod.fillRect(this.x, this.y, this.length, this.height);
         }
     }
@@ -157,7 +167,7 @@ function startBlob(){
                 platformOn[0] = possibleLandings[0];
             }
             if (platformOn.length > 0){
-                if (this.dy >= screenSize * 3/80){
+                if (this.dy >= screenSize * 3/80 || platformOn[0].kill){
                     gameOver = true;
                 }
                 this.onGround = true;
@@ -233,14 +243,15 @@ function startBlob(){
         platforms = []
         gameLevels[currentLevel].forEach(plat => platforms.push(plat))
         playerColor = '#1aa6b7';
-        Player = new BlobMan(0, screenSize - screenSize * 2/80);
+        // Player = new BlobMan(0, screenSize - screenSize * 2/80);
+        Player = new BlobMan(screenSize - screenSize * 2/80, screenSize * 7/8 - screenSize * 2/80);
         LevelGoal = new Goal(screenSize * 175/800, screenSize * 75/800, screenSize* 2/80);
         gameOver = false;
         animate();
     }
 
     function animate() {
-        if (!gameOver){
+        if (!gameOver || !paused){
             requestAnimationFrame(animate);
         } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
             let timer = document.querySelector('.counter')
