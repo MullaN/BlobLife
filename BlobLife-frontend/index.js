@@ -7,7 +7,7 @@ function startBlob(){
     gameWindow.setAttribute('class', 'game-window')
     // body.innerHTML = ''
     const canvas = document.createElement('canvas');
-    let screenSize = Math.floor(window.innerHeight * .9);
+    let screenSize = Math.floor(window.innerHeight * .6);
     canvas.height = screenSize;
     canvas.width = screenSize;
     gameWindow.appendChild(canvas)
@@ -59,11 +59,11 @@ function startBlob(){
         this.y = y;
         this.size = size;
         this.spin = this.size;
-        this.spincrementer = -1;
+        this.spincrementer = -(screenSize * 1/800);
         this.spincolor = ['','green','green']
 
         this.draw = function(){
-            twod.fillStyle = this.spincolor.slice(this.spincrementer)[0];
+            twod.fillStyle = this.spincolor.slice(this.spincrementer/screenSize * 800)[0];
             twod.fillRect((this.x + this.size/2 - this.spin * .5 ), this.y, this.spin, this.size);
         }
 
