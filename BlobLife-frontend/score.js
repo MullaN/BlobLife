@@ -10,7 +10,7 @@ counterDiv.appendChild(counter)
 
 let sidebar = document.createElement('div')
 sidebar.setAttribute('class', 'sidebar')
-body.append(sidebar)
+// body.append(sidebar)
 
 let currentDate = new Date();
 let date = `${currentDate.getMonth()+1}/${currentDate.getDate()}/${currentDate.getFullYear()}`
@@ -108,6 +108,7 @@ function startTime() {
     let timeCount = 0
 
     sidebar.append(counterDiv)
+    body.append(sidebar)
     setInterval(function(){
         timeCount += 1
         counterDiv.innerHTML = ''
@@ -165,17 +166,19 @@ function postScores(todaysScores, todaysBoard) {
     // let todaysBoard = leaderboards.find(leaderboard => leaderboard.date === date)
     let ul = document.getElementById(`${todaysBoard.id}l`)
     ul.innerHTML = ''
-    ul.textContent = `${todaysBoard.date}'s Top Scores:`
+    ul.textContent = `${todaysBoard.date}'s Top 10 Scores:`
     todaysScores.sort(compare)
     let i = 1 
     console.log(todaysScores)
     todaysScores.forEach(score => {
         let user = Users.find(user => user.id === score.user_id)
+        if (i < 11) {
         let li = document.createElement('li')
         console.log(score)
         li.textContent = `#${i} ${score.time} seconds by ${user.name}`
         i += 1
         ul.append(li)
+        }
     })
     
 }
