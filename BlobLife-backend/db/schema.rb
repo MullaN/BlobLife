@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 2020_10_20_171036) do
 
   create_table "leaderboards", force: :cascade do |t|
+    t.string "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -21,6 +22,7 @@ ActiveRecord::Schema.define(version: 2020_10_20_171036) do
     t.string "time"
     t.integer "user_id", null: false
     t.integer "leaderboard_id", null: false
+    t.string "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["leaderboard_id"], name: "index_scores_on_leaderboard_id"

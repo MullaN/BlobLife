@@ -1,5 +1,6 @@
 function startBlob(){
     startTime()
+    getLeaderBoards()
     const body = document.querySelector('body')
     let formDiv = document.getElementById('formDiv')
     if (!!(formDiv)) {formDiv.remove()}
