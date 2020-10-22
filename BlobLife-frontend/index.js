@@ -21,6 +21,7 @@ function startBlob(chosenColor){
         body.appendChild(gameWindow)
     } else {
         console.log('false')
+        window.removeEventListener('keydown',handlePause)
         canvas = document.querySelector('canvas');
         gameWindow = document.getElementsByClassName('game-window')[0]
     }
@@ -35,7 +36,7 @@ function startBlob(chosenColor){
     let playerMove = screenSize * 5/800;
     let playerColor = chosenColor;
     let dead = false;
-    let currentLevel = 1;
+    let currentLevel = 0;
     let lives = 3;
     let blobinfo = document.getElementById('blob').textContent
     if (blobinfo === 'Blob type: Gold'){
@@ -46,11 +47,11 @@ function startBlob(chosenColor){
     } else if (blobinfo === 'Blob type: Water') {
         jumpHeight = -(screenSize * 20/800);
     } else if (blobinfo === 'Blob type: Earth') {
-        console.log(blobinfo)
+        lives += 2;
     }else if (blobinfo === 'Blob type: Grey') {
         console.log(blobinfo)
     }
-    const gameLevels = [[],[],[],[]];
+    const gameLevels = [[],[]];
     gameLevels[0].push(new Platform(0, screenSize, screenSize, screenSize * 1/80));
     gameLevels[0].push(new Platform(0, screenSize * 7/8, screenSize * 7/8, screenSize * 2/80));
     gameLevels[0].push(new Platform(0, screenSize * 6/8, screenSize * 5/80, screenSize * 1/8));
@@ -262,6 +263,7 @@ function startBlob(chosenColor){
             }
         }
     })
+
     window.addEventListener('keyup', (e) => {
         const key = e.key;
         if (key === "ArrowLeft"){
@@ -289,18 +291,29 @@ function startBlob(chosenColor){
             animate();
         }
         else {
-            startBlob(chosenColor);
+            setTimeout(() => {
+                startTime();
+                currentLevel = 0;
+                lives = 3;
+                if (document.getElementById('blob').textContent === 'Blob type: Earth') {
+                    lives +=2;
+                }
+                init();
+            },3000);
+
         }
     }
 
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', handlePause)
+
+    function handlePause(e){
         if (e.key === 'Escape') {
             paused = !paused
             if (!paused){
                 animate();
             }
         }
-    })
+    }
 
     function animate() {
         if (!dead && !paused){
@@ -313,25 +326,46 @@ function startBlob(chosenColor){
             }
             requestAnimationFrame(animate);
         } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
-            let timer = document.querySelector('.counter')
-            let userid = document.querySelector('h3').id
-            createScore(timer.id, userid)
             playerColor = 'green';
             Player.draw();
-            currentLevel++;
+            if (currentLevel + 1 < gameLevels.length){
+                currentLevel++;
+            }
+            else {
+                paused = true;
+                twod.fillStyle = 'rgba(100,100,100,0.5)';
+                twod.fillRect(0, 0, screenSize, screenSize);
+                twod.fillStyle = 'green';
+                twod.font = `${screenSize * 1/8}px Tahoma`;
+                twod.fillText('YOU WIN AT', screenSize * 1/8, screenSize * .5);
+                twod.fillText('BLOBLIFE', screenSize * 1/8, screenSize * 5/8);
+                lives = 0;
+                let timer = document.querySelector('.counter')
+                let userid = document.querySelector('h3').id
+                createScore(timer.id, userid)
+            }
             paused = true;
             setTimeout(init, 2000);
         } else if (paused) {
-            console.log('test')
             twod.fillStyle = 'rgba(100,100,100,0.5)';
             twod.fillRect(0, 0, screenSize, screenSize);
             twod.fillStyle = 'black';
             twod.font = `${screenSize * 1/8}px Tahoma`;
             twod.fillText('PAUSED', screenSize * 25/80, screenSize * .5);
         } else if (dead) {
+            paused = true;
             playerColor = 'red';
             Player.draw();
-            lives--;
+            if (lives - 1 === 0){
+                paused = true;
+                twod.fillStyle = 'rgba(100,100,100,0.5)';
+                twod.fillRect(0, 0, screenSize, screenSize);
+                twod.fillStyle = 'red';
+                twod.font = `${screenSize * 1/8}px Tahoma`;
+                twod.fillText('GAME OVER', screenSize * 1/8, screenSize * .5);
+            } else {
+                lives--;
+            }
             setTimeout(init, 2000);
         }
         for (let i = 0; i < lives; i++){

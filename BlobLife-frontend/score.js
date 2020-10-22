@@ -130,7 +130,7 @@ function startTime() {
 function createScore(time, userid) {
     let todaysBoard = leaderboards.find(leaderboard => leaderboard.date === date)
     let todaysScores = scores.filter(score => score.date === date )
-    let ul = document.getElementById(`${todaysBoard.id}l`)
+    //let ul = document.getElementById(`${todaysBoard.id}l`)
 
     fetch((scoreUrl), {
         method: 'POST',
