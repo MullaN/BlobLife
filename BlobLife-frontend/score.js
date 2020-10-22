@@ -103,21 +103,26 @@ function addLeaderBoard(leaderboards, scores){
     }
 }
 
-let paused = false
+let paused = false;
+let timer;
 
 function startTime() {
+    clearInterval(timer);
     let timeCount = 0
-
-    sidebar.append(counterDiv)
-    body.append(sidebar)
-    setInterval(function(){
+    if (document.getElementsByClassName('sidebar').length === 0){
+        sidebar.append(counterDiv)
+        body.append(sidebar)
+    } else {
+        counter.textContent = `Time: 0`
+    }
+    timer = setInterval(function(){
         if(!paused) {
-        timeCount += 1
-        counterDiv.innerHTML = ''
-        counter.setAttribute('class', 'counter')
-        counter.textContent = `Time: ${timeCount}`
-        counter.id = timeCount
-        counterDiv.appendChild(counter)
+            timeCount += 1
+            counterDiv.innerHTML = ''
+            counter.setAttribute('class', 'counter')
+            counter.textContent = `Time: ${timeCount}`
+            counter.id = timeCount
+            counterDiv.appendChild(counter)
         }
     }, 1000)
 }

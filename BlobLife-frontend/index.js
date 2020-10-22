@@ -1,6 +1,5 @@
 function startBlob(chosenColor){
     startTime()
-    getLeaderBoards()
     const body = document.querySelector('body')
     // let formDiv = document.getElementById('formDiv')
     // if (!!(formDiv)) {formDiv.remove()}
@@ -8,18 +7,26 @@ function startBlob(chosenColor){
     if (!!(blobDiv)) {blobDiv.remove()}
 
     // let sidebar = document.querySelector('.sidebar')
-    
+    let gameWindow;
+    let canvas;
 
-   
-    const gameWindow = document.createElement('div')
-    gameWindow.setAttribute('class', 'game-window')
-    // body.innerHTML = ''
-    const canvas = document.createElement('canvas');
+   if (!document.getElementsByClassName('game-window').length){
+        getLeaderBoards()
+       console.log('true')
+        gameWindow = document.createElement('div')
+        gameWindow.setAttribute('class', 'game-window')
+        // body.innerHTML = ''
+        canvas = document.createElement('canvas');
+        gameWindow.appendChild(canvas)
+        body.appendChild(gameWindow)
+    } else {
+        console.log('false')
+        canvas = document.querySelector('canvas');
+        gameWindow = document.getElementsByClassName('game-window')[0]
+    }
     let screenSize = Math.floor(window.innerHeight * .85);
     canvas.height = screenSize;
     canvas.width = screenSize;
-    gameWindow.appendChild(canvas)
-    body.appendChild(gameWindow)
     
     let gravity = screenSize * 1/800;
     let jumpHeight = -(screenSize * 15/800);
@@ -27,8 +34,9 @@ function startBlob(chosenColor){
     let grabbed = false;
     let playerMove = screenSize * 5/800;
     let playerColor = chosenColor;
-    let gameOver = false;
-    let currentLevel = 0;
+    let dead = false;
+    let currentLevel = 1;
+    let lives = 3;
     let blobinfo = document.getElementById('blob').textContent
     if (blobinfo === 'Blob type: Gold'){
         // Blob type logic goes here! (perhaps)
@@ -72,7 +80,7 @@ function startBlob(chosenColor){
     gameLevels[1].push(new Platform(screenSize * 25/80, screenSize * 15/80, screenSize * 7/80, screenSize * 2/80));
     gameLevels[1].push(new Platform(0, -screenSize * 1/2, screenSize, screenSize * 1/2));
 
-    // console.log(typeof canvas.height)
+
     const twod = canvas.getContext('2d');
 
     function Platform(x, y, length, height, kill=false){
@@ -194,7 +202,7 @@ function startBlob(chosenColor){
             }
             if (platformOn.length > 0){
                 if (this.dy >= screenSize * 3/80 || platformOn[0].kill){
-                    gameOver = true;
+                    dead = true;
                 }
                 this.onGround = true;
                 this.y = platformOn[0].y - this.size;
@@ -266,19 +274,23 @@ function startBlob(chosenColor){
     })
 
     function init(){
-        platforms = []
-        gameLevels[currentLevel].forEach(plat => platforms.push(plat))
-        playerColor = chosenColor;
-;
-        if (currentLevel === 0 ){
-            Player = new BlobMan(0, screenSize - screenSize * 2/80)
-        } else {
-            Player = new BlobMan(screenSize - screenSize * 2/80, screenSize * 7/8 - screenSize * 2/80)
+        if (lives > 0) {
+            platforms = []
+            gameLevels[currentLevel].forEach(plat => platforms.push(plat))
+            playerColor = chosenColor;
+            if (currentLevel === 0 ){
+                Player = new BlobMan(0, screenSize - screenSize * 2/80)
+            } else {
+                Player = new BlobMan(screenSize - screenSize * 2/80, screenSize * 7/8 - screenSize * 2/80)
+            }
+            LevelGoal = new Goal(screenSize * 175/800, screenSize * 75/800, screenSize* 2/80);
+            dead = false;
+            paused = false;
+            animate();
         }
-        LevelGoal = new Goal(screenSize * 175/800, screenSize * 75/800, screenSize* 2/80);
-        gameOver = false;
-        paused = false;
-        animate();
+        else {
+            startBlob(chosenColor);
+        }
     }
 
     window.addEventListener('keydown', (e) => {
@@ -291,13 +303,13 @@ function startBlob(chosenColor){
     })
 
     function animate() {
-        if (!gameOver && !paused){
+        if (!dead && !paused){
             twod.clearRect(0,0,canvas.width,canvas.height);
             platforms.forEach(plat => plat.draw());
             Player.update();
             LevelGoal.update();
             if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
-                gameOver = true;
+                dead = true;
             }
             requestAnimationFrame(animate);
         } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
@@ -316,10 +328,25 @@ function startBlob(chosenColor){
             twod.fillStyle = 'black';
             twod.font = `${screenSize * 1/8}px Tahoma`;
             twod.fillText('PAUSED', screenSize * 25/80, screenSize * .5);
-        } else if (gameOver) {
+        } else if (dead) {
             playerColor = 'red';
             Player.draw();
+            lives--;
             setTimeout(init, 2000);
+        }
+        for (let i = 0; i < lives; i++){
+            const xspacing = i * (screenSize * 1/80 + screenSize * 5/800) + screenSize * 5/800
+            const yspacing = screenSize * 5/800;
+            twod.fillStyle = chosenColor;
+            twod.fillRect(xspacing, yspacing, screenSize * 1/80, screenSize * 1/80);
+            twod.fillStyle = 'white';
+            twod.fillRect(xspacing + screenSize * 25/8000, yspacing + screenSize * 15/8000, screenSize * 1/800, screenSize * 25/8000);
+            twod.fillRect(xspacing + screenSize * 65/8000, yspacing + screenSize * 15/8000, screenSize * 1/800, screenSize * 25/8000);
+            twod.beginPath();
+            twod.strokeStyle = 'white';
+            twod.moveTo(xspacing + screenSize * 15/8000, yspacing + screenSize * 65/8000);
+            twod.lineTo(xspacing + screenSize * 85/8000, yspacing + screenSize * 65/8000);
+            twod.stroke();
         }
     }
     init();
