@@ -172,12 +172,10 @@ function postScores(todaysScores, todaysBoard) {
     ul.textContent = `${todaysBoard.date}'s Top 10 Scores:`
     todaysScores.sort(compare)
     let i = 1 
-    console.log(todaysScores)
     todaysScores.forEach(score => {
         let user = Users.find(user => user.id === score.user_id)
         if (i < 11) {
         let li = document.createElement('li')
-        console.log(score)
         li.textContent = `#${i} ${score.time} seconds by ${user.name}`
         i += 1
         ul.append(li)

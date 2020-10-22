@@ -63,7 +63,7 @@ function startBlob(){
     gameLevels[1].push(new Platform(0, screenSize * 55/80, screenSize * 15/80, screenSize * 2/80));
     gameLevels[1].push(new Platform(screenSize * 15/80, screenSize * 45/80, screenSize * 15/80, screenSize * 2/80));
 
-    console.log(typeof canvas.height)
+    // console.log(typeof canvas.height)
     const twod = canvas.getContext('2d');
 
     function Platform(x, y, length, height, kill=false){
