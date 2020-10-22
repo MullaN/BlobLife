@@ -39,6 +39,8 @@ function startBlob(chosenColor){
         jumpHeight = -(screenSize * 20/800);
     } else if (blobinfo === 'Blob type: Earth') {
         console.log(blobinfo)
+    }else if (blobinfo === 'Blob type: Grey') {
+        console.log(blobinfo)
     }
     const gameLevels = [[],[],[],[]];
     gameLevels[0].push(new Platform(0, screenSize, screenSize, screenSize * 1/80));

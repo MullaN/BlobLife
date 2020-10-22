@@ -144,11 +144,32 @@ function selectBlob() {
     let goldBlobImg = document.createElement('img')
     goldBlobImg.src = 'images/goldBlob.jpg';
 
+    // greyblob
+    let greyBlobDiv = document.createElement('div')
+    greyBlobDiv.id = 'greyBlob'
+
+    let greyBlob = document.createElement('p')
+    greyBlob.textContent = 'Blob type: Grey'
+    greyBlob.id = 'blob'
+
+    greyBlobDiv.addEventListener('click', e => {
+        sidebar.append(greyBlob)
+        startBlob('#fca73b')
+    })
+
+    let greyBlobText = document.createElement('p')
+    greyBlobText.textContent = 'Grey Blob. Falls slow like a feather.'
+
+    let greyBlobImg = document.createElement('img')
+    greyBlobImg.src = 'images/greyBlob.jpg';
+
+    
+    greyBlobDiv.append(greyBlobText, greyBlobImg)
     goldBlobDiv.append(goldBlobText, goldBlobImg)
     fireBlobDiv.append(fireBlobText, fireBlobImg)
     waterBlobDiv.append(waterBlobText, waterBlobImg)
     earthBlobDiv.append(earthBlobText, earthBlobImg)
-    blobDiv.append(blobDivText, fireBlobDiv,waterBlobDiv, earthBlobDiv, goldBlobDiv)
+    blobDiv.append(blobDivText, fireBlobDiv,waterBlobDiv, earthBlobDiv, goldBlobDiv, greyBlobDiv)
 
     body.append(blobDiv)
 
