@@ -1,4 +1,4 @@
-function startBlob(){
+function startBlob(chosenColor){
     startTime()
     getLeaderBoards()
     const body = document.querySelector('body')
@@ -9,17 +9,7 @@ function startBlob(){
 
     // let sidebar = document.querySelector('.sidebar')
     
-    let blobinfo = document.getElementById('blob').textContent
-    if (blobinfo === 'Blob type: Gold'){
-        // Blob type logic goes here! (perhaps)
-        console.log(blobinfo)
-    } else if (blobinfo === 'Blob type: Fire') {
-        console.log(blobinfo)
-    } else if (blobinfo === 'Blob type: Water') {
-        console.log(blobinfo)
-    } else if (blobinfo === 'Blob type: Earth') {
-        console.log(blobinfo)
-    }
+
    
     const gameWindow = document.createElement('div')
     gameWindow.setAttribute('class', 'game-window')
@@ -36,9 +26,20 @@ function startBlob(){
     let jumped = false;
     let grabbed = false;
     let playerMove = screenSize * 5/800;
-    let playerColor = '#1aa6b7';
+    let playerColor = chosenColor;
     let gameOver = false;
     let currentLevel = 0;
+    let blobinfo = document.getElementById('blob').textContent
+    if (blobinfo === 'Blob type: Gold'){
+        // Blob type logic goes here! (perhaps)
+        console.log(blobinfo)
+    } else if (blobinfo === 'Blob type: Fire') {
+        playerMove = screenSize * 10/800;
+    } else if (blobinfo === 'Blob type: Water') {
+        jumpHeight = -(screenSize * 20/800);
+    } else if (blobinfo === 'Blob type: Earth') {
+        console.log(blobinfo)
+    }
     const gameLevels = [[],[],[],[]];
     gameLevels[0].push(new Platform(0, screenSize, screenSize, screenSize * 1/80));
     gameLevels[0].push(new Platform(0, screenSize * 7/8, screenSize * 7/8, screenSize * 2/80));
@@ -56,12 +57,18 @@ function startBlob(){
     gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 26/80, screenSize * 2/80, screenSize * 4/80));
     gameLevels[0].push(new Platform(screenSize * 5/8, screenSize * 17/80, screenSize * 2/80, screenSize * 4/80));
     gameLevels[0].push(new Platform(0, screenSize * 15/80, screenSize * 7/8, screenSize * 2/80));
+    gameLevels[0].push(new Platform(0, -screenSize * 1/2, screenSize, screenSize * 1/2));
     gameLevels[1].push(new Platform(0, screenSize - screenSize * 1/80, screenSize, screenSize * 1/80, true));
     gameLevels[1].push(new Platform(screenSize * 65/80, screenSize * 7/8, screenSize * 15/80, screenSize * 2/80));
     gameLevels[1].push(new Platform(screenSize * 1/2, screenSize * 7/8, screenSize * 15/80, screenSize * 2/80));
     gameLevels[1].push(new Platform(screenSize * 1/4, screenSize * 65/80, screenSize * 15/80, screenSize * 2/80));
     gameLevels[1].push(new Platform(0, screenSize * 55/80, screenSize * 15/80, screenSize * 2/80));
-    gameLevels[1].push(new Platform(screenSize * 15/80, screenSize * 45/80, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 19/80, screenSize * 45/80, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 1/2, screenSize * 35/80, screenSize * 30/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 55/80, screenSize * 20/80, screenSize * 15/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 1/2, screenSize * 15/80, screenSize * 7/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(screenSize * 25/80, screenSize * 15/80, screenSize * 7/80, screenSize * 2/80));
+    gameLevels[1].push(new Platform(0, -screenSize * 1/2, screenSize, screenSize * 1/2));
 
     // console.log(typeof canvas.height)
     const twod = canvas.getContext('2d');
@@ -77,7 +84,7 @@ function startBlob(){
             if (this.kill){
                 twod.fillStyle = 'rgba(255,0,0,1)';
             } else {
-                twod.fillStyle = 'rgba(0,0,0,0)';
+                twod.fillStyle = 'rgba(0,0,0,1)';
             }
             twod.fillRect(this.x, this.y, this.length, this.height);
         }
@@ -259,7 +266,8 @@ function startBlob(){
     function init(){
         platforms = []
         gameLevels[currentLevel].forEach(plat => platforms.push(plat))
-        playerColor = '#1aa6b7';
+        playerColor = chosenColor;
+;
         if (currentLevel === 0 ){
             Player = new BlobMan(0, screenSize - screenSize * 2/80)
         } else {

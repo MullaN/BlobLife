@@ -80,7 +80,7 @@ function selectBlob() {
 
     fireBlobDiv.addEventListener('click', e => {
         sidebar.append(fireBlob)
-        startBlob()
+        startBlob('#950c25')
     })
 
     let fireBlobText = document.createElement('p')
@@ -98,7 +98,7 @@ function selectBlob() {
 
     waterBlobDiv.addEventListener('click', e => {
         sidebar.append(waterBlob)
-        startBlob()
+        startBlob('#2695d9')
     })
 
     let waterBlobText = document.createElement('p')
@@ -116,7 +116,7 @@ function selectBlob() {
 
     earthBlobDiv.addEventListener('click', e => {
         sidebar.append(earthBlob)
-        startBlob()
+        startBlob('#475742')
     })
 
     let earthBlobText = document.createElement('p')
@@ -135,7 +135,7 @@ function selectBlob() {
 
     goldBlobDiv.addEventListener('click', e => {
         sidebar.append(goldBlob)
-        startBlob()
+        startBlob('#fca73b')
     })
 
     let goldBlobText = document.createElement('p')
