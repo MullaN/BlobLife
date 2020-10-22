@@ -33,3 +33,8 @@ body {
 }
 
 div.sidebar, div.gamewindow { float: left; }
+
+.blobDiv{
+  color: #fcfcc2;
+  font-family: Tahoma, Geneva, sans-serif
+}

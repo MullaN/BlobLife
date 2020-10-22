@@ -2,9 +2,24 @@ function startBlob(){
     startTime()
     getLeaderBoards()
     const body = document.querySelector('body')
-    let formDiv = document.getElementById('formDiv')
-    if (!!(formDiv)) {formDiv.remove()}
-    let sidebar = document.querySelector('.sidebar')
+    // let formDiv = document.getElementById('formDiv')
+    // if (!!(formDiv)) {formDiv.remove()}
+    let blobDiv = document.getElementById('blobDiv')
+    if (!!(blobDiv)) {blobDiv.remove()}
+
+    // let sidebar = document.querySelector('.sidebar')
+    
+    let blobinfo = document.getElementById('blob').textContent
+    if (blobinfo === 'Blob type: Gold'){
+        // Blob type logic goes here! (perhaps)
+        console.log(blobinfo)
+    } else if (blobinfo === 'Blob type: Fire') {
+        console.log(blobinfo)
+    } else if (blobinfo === 'Blob type: Water') {
+        console.log(blobinfo)
+    } else if (blobinfo === 'Blob type: Earth') {
+        console.log(blobinfo)
+    }
    
     const gameWindow = document.createElement('div')
     gameWindow.setAttribute('class', 'game-window')
