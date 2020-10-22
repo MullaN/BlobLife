@@ -104,11 +104,6 @@ function addLeaderBoard(leaderboards, scores){
 }
 
 let paused = false
-window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        paused = !paused
-    }
-})
 
 function startTime() {
     let timeCount = 0

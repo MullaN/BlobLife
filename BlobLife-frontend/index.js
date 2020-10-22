@@ -23,7 +23,7 @@ function startBlob(){
     let playerMove = screenSize * 5/800;
     let playerColor = '#1aa6b7';
     let gameOver = false;
-    let currentLevel = 1;
+    let currentLevel = 0;
     const gameLevels = [[],[],[],[]];
     gameLevels[0].push(new Platform(0, screenSize, screenSize, screenSize * 1/80));
     gameLevels[0].push(new Platform(0, screenSize * 7/8, screenSize * 7/8, screenSize * 2/80));
@@ -62,7 +62,7 @@ function startBlob(){
             if (this.kill){
                 twod.fillStyle = 'rgba(255,0,0,1)';
             } else {
-                twod.fillStyle = 'rgba(0,0,0,1)';
+                twod.fillStyle = 'rgba(0,0,0,0)';
             }
             twod.fillRect(this.x, this.y, this.length, this.height);
         }
@@ -74,10 +74,10 @@ function startBlob(){
         this.size = size;
         this.spin = this.size;
         this.spincrementer = -(screenSize * 1/800);
-        this.spincolor = ['','green','green']
+        this.spincolor = ['','darkgreen','green']
 
         this.draw = function(){
-            twod.fillStyle = this.spincolor.slice(this.spincrementer/screenSize * 800)[0];
+            twod.fillStyle = this.spincolor.slice(Math.round(this.spincrementer/screenSize * 800))[0];
             twod.fillRect((this.x + this.size/2 - this.spin * .5 ), this.y, this.spin, this.size);
         }
 
@@ -245,15 +245,35 @@ function startBlob(){
         platforms = []
         gameLevels[currentLevel].forEach(plat => platforms.push(plat))
         playerColor = '#1aa6b7';
-        // Player = new BlobMan(0, screenSize - screenSize * 2/80);
-        Player = new BlobMan(screenSize - screenSize * 2/80, screenSize * 7/8 - screenSize * 2/80);
+        if (currentLevel === 0 ){
+            Player = new BlobMan(0, screenSize - screenSize * 2/80)
+        } else {
+            Player = new BlobMan(screenSize - screenSize * 2/80, screenSize * 7/8 - screenSize * 2/80)
+        }
         LevelGoal = new Goal(screenSize * 175/800, screenSize * 75/800, screenSize* 2/80);
         gameOver = false;
+        paused = false;
         animate();
     }
 
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            paused = !paused
+            if (!paused){
+                animate();
+            }
+        }
+    })
+
     function animate() {
-        if (!gameOver || !paused){
+        if (!gameOver && !paused){
+            twod.clearRect(0,0,canvas.width,canvas.height);
+            platforms.forEach(plat => plat.draw());
+            Player.update();
+            LevelGoal.update();
+            if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
+                gameOver = true;
+            }
             requestAnimationFrame(animate);
         } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
             let timer = document.querySelector('.counter')
@@ -261,18 +281,20 @@ function startBlob(){
             createScore(timer.id, userid)
             playerColor = 'green';
             Player.draw();
+            currentLevel++;
+            paused = true;
             setTimeout(init, 2000);
-        } else {
+        } else if (paused) {
+            console.log('test')
+            twod.fillStyle = 'rgba(100,100,100,0.5)';
+            twod.fillRect(0, 0, screenSize, screenSize);
+            twod.fillStyle = 'black';
+            twod.font = `${screenSize * 1/8}px Tahoma`;
+            twod.fillText('PAUSED', screenSize * 25/80, screenSize * .5);
+        } else if (gameOver) {
             playerColor = 'red';
             Player.draw();
             setTimeout(init, 2000);
-        }
-        twod.clearRect(0,0,canvas.width,canvas.height);
-        platforms.forEach(plat => plat.draw());
-        Player.update();
-        LevelGoal.update();
-        if(overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
-            gameOver = true;
         }
     }
     init();
