@@ -29,9 +29,10 @@ function startBlob(chosenColor){
     let playerMove = screenSize * 5/800;
     let playerColor = chosenColor;
     let dead = false;
-    let currentLevel = 2;
+    let currentLevel = 0;
     let lives = 3;
     let float = false;
+    let soundPlayed = false;
     let blobinfo = document.getElementById('blob').textContent
     if (blobinfo === 'Blob type: Gold'){
         playerMove = screenSize * 10/800;
@@ -237,6 +238,7 @@ function startBlob(chosenColor){
                 }
                 platformOn = [];
                 this.onGround = false;
+                soundPlayed = false;
             }
             this.y += this.dy;
             if (this.dx > 0){
@@ -279,6 +281,11 @@ function startBlob(chosenColor){
                     dead = true;
                 }
                 this.onGround = true;
+                if (!soundPlayed){
+                    soundPlayed = true;
+                    landSound.play()
+                }
+
                 this.y = platformOn[0].y - this.size;
                 this.dy = 0;
                 grabbed = false;
@@ -322,6 +329,7 @@ function startBlob(chosenColor){
             if (Player.onGround && !jumped){
                 Player.dy = jumpHeight;
                 jumped = true;
+                soundPlayed = false;
             } else if(Player.wallGrab < 0 && !jumped){
                 Player.dy = jumpHeight;
                 Player.wallGrab = 0;
