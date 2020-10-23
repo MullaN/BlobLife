@@ -89,6 +89,7 @@ function startBlob(chosenColor){
     gameLevels[2].push(new Platform(screenSize * 470/800, screenSize * 290/800, screenSize * 190/800, screenSize * 30/800));
     gameLevels[2].push(new Platform(screenSize * 550/800, screenSize * 420/800, screenSize * 190/800, screenSize * 30/800));
     gameLevels[2].push(new Platform(screenSize * 550/800, screenSize * 720/800, screenSize * 190/800, screenSize * 30/800));
+    gameLevels[2].push(new Platform(0, -screenSize * 1/2, screenSize, screenSize * 1/2));
 
 
 
@@ -328,12 +329,16 @@ function startBlob(chosenColor){
                 LevelGoal = new Goal(screenSize * 175/800, screenSize * 75/800, screenSize* 2/80);
             } else {
                 Player = new BlobMan(screenSize * 45/800, screenSize * 64/80 - screenSize * 2/80);
-                LevelGoal = new Goal(screenSize * 700/800, screenSize * 700/800, screenSize* 2/80);
+                LevelGoal = new Goal(screenSize * 600/800, screenSize * 690/800, screenSize* 2/80);
                 ball1 = new BouncingBall(screenSize * 38/80, screenSize * 3/8, screenSize * 3/80, screenSize * 485/800);
                 ball2 = new BouncingBall(screenSize * 460/800, screenSize * 400/800, screenSize * 3/80, screenSize * 485/800);
+                ball3 = new BouncingBall(screenSize * 175/800, screenSize * 40/800, screenSize * 3/80, screenSize * 160/800);
+                ball4 = new BouncingBall(screenSize * 700/800, screenSize * 550/800, screenSize * 3/80, screenSize * 720/800);
                 // console.log(ball1)
                 balls.push(ball1);
                 balls.push(ball2);
+                balls.push(ball3);
+                balls.push(ball4);
             }
             dead = false;
             paused = false;
