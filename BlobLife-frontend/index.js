@@ -133,6 +133,7 @@ function startBlob(chosenColor){
                 this.dy = -this.dy;
                 if (overlap(Player.x, Player.y, Player.size, this.x - this.r * 0.9, this.y - this.r * 0.9, (this.r * 0.9) * 2) > 0){
                     dead = true;
+                    burnSound.play()
                 }
             } else {
                 this.dy += gravity;
@@ -140,6 +141,7 @@ function startBlob(chosenColor){
             this.y += this.dy;
             if (overlap(Player.x, Player.y, Player.size, this.x - this.r * 0.9, this.y - this.r * 0.9, (this.r * 0.9) * 2) > 0){
                 dead = true;
+                burnSound.play()
             }
             this.draw();
         }
@@ -290,11 +292,15 @@ function startBlob(chosenColor){
                 platformOn[0] = possibleLandings[0];
             }
             if (platformOn.length > 0){
-                if (this.dy >= screenSize * 3/80 || platformOn[0].kill){
+                if (this.dy >= screenSize * 3/80){
+                    thudSound.play()
+                    dead = true;
+                } else if (platformOn[0].kill){
+                    burnSound.play()
                     dead = true;
                 }
                 this.onGround = true;
-                if (!soundPlayed){
+                if (!soundPlayed && !dead){
                     soundPlayed = true;
                     landSound.play()
                 }
@@ -463,7 +469,6 @@ function startBlob(chosenColor){
         } else if (dead) {
             paused = true;
             playerColor = 'red';
-            burnSound.play()
             Player.draw();
             if (lives - 1 === 0){
                 lives--;
