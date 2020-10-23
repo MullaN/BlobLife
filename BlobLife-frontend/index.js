@@ -166,6 +166,31 @@ function startBlob(chosenColor){
         }
     }
 
+    // Sound function and stuff
+
+    function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function(){
+          this.sound.play();
+        }
+        this.stop = function(){
+          this.sound.pause();
+        }
+      }
+
+    let landSound;
+    landSound = new sound('sound/blobDrop.mp3')
+
+    // to play landSound do: landSound.play()  
+
+    // end of sound related stuff
+
+
     function BlobMan(x, y){
         this.x = x;
         this.y = y;

@@ -140,7 +140,7 @@ function selectBlob() {
     })
 
     let goldBlobText = document.createElement('p')
-    goldBlobText.textContent = 'Golden Blob. Moves fast. Jumps high. No lives.'
+    goldBlobText.textContent = 'Golden Blob. Moves fast. Jumps high. One life.'
 
     let goldBlobImg = document.createElement('img')
     goldBlobImg.src = 'images/goldBlob.jpg';
