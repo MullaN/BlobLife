@@ -190,6 +190,10 @@ function startBlob(chosenColor){
     let burnSound;
     burnSound = new sound('sound/burnBlob.mp3')
 
+    let themeSound;
+    themeSound = new sound('sound/theme.mp3')
+    themeSound.play()
+
     // to play landSound do: landSound.play()  
 
     // end of sound related stuff
@@ -429,6 +433,7 @@ function startBlob(chosenColor){
             }
             else {
                 paused = true;
+                themeSound.stop()
                 twod.fillStyle = 'rgba(100,100,100,0.5)';
                 twod.fillRect(0, 0, screenSize, screenSize);
                 twod.fillStyle = 'green';
