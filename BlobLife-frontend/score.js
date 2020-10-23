@@ -67,7 +67,7 @@ function addLeaderBoard(leaderboards, scores){
         // console.log(leaderboards)
 
         let ul = document.createElement('ul')
-        ul.textContent = `${todaysBoard.date}'s Top Scores:`
+        ul.textContent = `${todaysBoard.date}'s Top 10 Scores:`
         ul.id = `${todaysBoard.id}l` // l for leaderboard
 
 
@@ -94,9 +94,9 @@ function addLeaderBoard(leaderboards, scores){
             boardDiv.setAttribute('class', 'leaderboard')
 
             let ul = document.createElement('ul')
-            ul.textContent = `${todaysBoard.date}'s Top Scores:`
+            ul.textContent = `${todaysBoard.date}'s Top 10 Scores:`
             ul.id = `${todaysBoard.id}l` // l for leaderboard
-
+            leaderboards.push(todaysBoard)
             boardDiv.append(ul)
             sidebar.append(boardDiv)
         })
@@ -131,6 +131,19 @@ function createScore(time, userid) {
     let todaysBoard = leaderboards.find(leaderboard => leaderboard.date === date)
     let todaysScores = scores.filter(score => score.date === date )
     //let ul = document.getElementById(`${todaysBoard.id}l`)
+    let blobinfo = document.getElementById('blob').textContent
+    let blobtype;
+    if (blobinfo === 'Blob type: Gold'){
+        blobtype = 'gold'
+    } else if (blobinfo === 'Blob type: Fire') {
+        blobtype = 'fire'
+    } else if (blobinfo === 'Blob type: Water') {
+        blobtype = 'water'
+    } else if (blobinfo === 'Blob type: Earth') {
+        blobtype = 'earth'
+    }else if (blobinfo === 'Blob type: Grey') {
+        blobtype = 'grey'
+    }
 
     fetch((scoreUrl), {
         method: 'POST',
@@ -141,7 +154,8 @@ function createScore(time, userid) {
             'time': time,
             'user_id': userid,
             'leaderboard_id': todaysBoard.id,
-            'date': date
+            'date': date,
+            'blobtype': blobtype
         })
     })
     .then(res => res.json())
@@ -154,10 +168,12 @@ function createScore(time, userid) {
         // li.textContent = `${parseInt(score.time)} seconds by ${user.name}`
 
         // ul.append(li)
+        scores.push(score)
         todaysScores.push(score)
         postScores(todaysScores, todaysBoard)
 
     })
+
 }
 
 // let date = new Date().getTime()
@@ -178,11 +194,27 @@ function postScores(todaysScores, todaysBoard) {
     todaysScores.sort(compare)
     let i = 1 
     todaysScores.forEach(score => {
+        const blobImg = document.createElement('img');
+        if (score.blobtype === 'gold'){
+            blobImg.src = 'images/goldBlob.jpg'
+        } else if (score.blobtype === 'fire') {
+            blobImg.src = 'images/fireBlob.jpg'
+        } else if (score.blobtype === 'water') {
+            blobImg.src = 'images/waterBlob.jpg'
+        } else if (score.blobtype === 'earth') {
+            blobImg.src = 'images/earthBlob.jpg'
+        }else if (score.blobtype === 'grey') {
+            blobImg.src = 'images/greyBlob.jpg'
+        }
+        blobImg.height = 15;
+        blobImg.width = 15;
+        blobImg.style = 'display:inline';
         let user = Users.find(user => user.id === score.user_id)
         if (i < 11) {
         let li = document.createElement('li')
         li.textContent = `#${i} ${score.time} seconds by ${user.name}`
         i += 1
+        li.append(blobImg);
         ul.append(li)
         }
     })

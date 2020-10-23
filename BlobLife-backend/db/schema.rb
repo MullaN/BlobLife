@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2020_10_20_171036) do
     t.integer "user_id", null: false
     t.integer "leaderboard_id", null: false
     t.string "date"
+    t.string "blobtype"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["leaderboard_id"], name: "index_scores_on_leaderboard_id"

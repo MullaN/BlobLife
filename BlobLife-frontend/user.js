@@ -45,6 +45,7 @@ function userForm() {
                 h3.id= user.id
                 sidebar.appendChild(h3)
                 // startBlob()
+                Users.push(user);
                 selectBlob()
             })
         }
@@ -116,7 +117,7 @@ function selectBlob() {
 
     earthBlobDiv.addEventListener('click', e => {
         sidebar.append(earthBlob)
-        startBlob('#475742')
+        startBlob('#b5651d')
     })
 
     let earthBlobText = document.createElement('p')
@@ -154,7 +155,7 @@ function selectBlob() {
 
     greyBlobDiv.addEventListener('click', e => {
         sidebar.append(greyBlob)
-        startBlob('#fca73b')
+        startBlob('grey')
     })
 
     let greyBlobText = document.createElement('p')

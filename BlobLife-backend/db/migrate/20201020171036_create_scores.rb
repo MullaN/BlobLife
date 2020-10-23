@@ -5,6 +5,7 @@ class CreateScores < ActiveRecord::Migration[6.0]
       t.references :user, null: false, foreign_key: true
       t.references :leaderboard, null: false, foreign_key: true
       t.string :date
+      t.string :blobtype
       t.timestamps
     end
   end
