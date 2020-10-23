@@ -128,7 +128,7 @@ function startBlob(chosenColor){
         }
         
         this.update = function(){
-            if (this.y + this.r >= floor){
+            if (this.y + this.r  + this.dy >= floor){
                 this.y = floor - this.r;
                 this.dy = -this.dy;
                 if (overlap(Player.x, Player.y, Player.size, this.x - this.r * 0.9, this.y - this.r * 0.9, (this.r * 0.9) * 2) > 0){
