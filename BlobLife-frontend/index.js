@@ -187,6 +187,9 @@ function startBlob(chosenColor){
     let landSound;
     landSound = new sound('sound/blobDrop.mp3')
 
+    let burnSound;
+    burnSound = new sound('sound/burnBlob.mp3')
+
     // to play landSound do: landSound.play()  
 
     // end of sound related stuff
@@ -448,6 +451,7 @@ function startBlob(chosenColor){
         } else if (dead) {
             paused = true;
             playerColor = 'red';
+            burnSound.play()
             Player.draw();
             if (lives - 1 === 0){
                 lives--;
