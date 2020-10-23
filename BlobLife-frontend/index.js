@@ -192,7 +192,13 @@ function startBlob(chosenColor){
 
     let themeSound;
     themeSound = new sound('sound/theme.mp3')
-    themeSound.play()
+    // themeSound.play()
+
+    let winSound;
+    winSound = new sound('sound/win.mp3')
+
+    let thudSound;
+    thudSound = new sound('sound/thudBlob.mp3')
 
     // to play landSound do: landSound.play()  
 
@@ -428,6 +434,7 @@ function startBlob(chosenColor){
         } else if (overlap(Player.x, Player.y, Player.size, LevelGoal.x, LevelGoal.y, LevelGoal.size) > 0){
             playerColor = 'green';
             Player.draw();
+            winSound.play()
             if (currentLevel + 1 < gameLevels.length){
                 currentLevel++;
             }
